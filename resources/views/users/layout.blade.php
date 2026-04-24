@@ -8,8 +8,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
             padding-top: 110px;
-            padding-bottom: 60px;
             background-color: #f8f9fa;
         }
         .user-header {
@@ -68,10 +70,6 @@
             margin: 0 20px;
         }
         .user-footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
             height: 50px;
             background-color: #28a745;
             color: white;
@@ -81,9 +79,13 @@
             justify-content: center;
             padding: 0 20px;
             font-size: 14px;
+            margin-top: auto;
+            flex-shrink: 0;
         }
         .user-content {
-            min-height: calc(100vh - 120px);
+            flex: 1 0 auto;
+            width: 100%;
+            padding-bottom: 24px;
         }
         .cart-icon {
             font-size: 1.5rem;
@@ -141,8 +143,8 @@
     </header>
 
     <nav class="category-navbar">
-        <a href="{{ route('customer.home', array_filter(['q' => request('q'), 'sort' => request('sort')])) }}"
-           class="{{ request()->filled('category') ? '' : 'active' }}">
+        <a href="{{ route('customer.home', array_filter(['sort' => request('sort')])) }}"
+           class="{{ !request()->filled('category') && !request()->filled('q') ? 'active' : '' }}">
             <i class="bi bi-house-fill me-1"></i>Trang chủ
         </a>
         @if($categories && $categories->count() > 0)

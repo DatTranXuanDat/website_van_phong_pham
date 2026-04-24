@@ -98,7 +98,7 @@ Route::middleware('auth')->group(function () {
         return view('users.dashboard', compact('categories', 'products', 'selectedCategory', 'search', 'sort'));
     })->name('customer.home');
 
-    Route::get('/customer/products/{product}', function (Product $product) {
+    Route::get('/customer/products/{product:slug}', function (Product $product) {
         $categories = Category::orderBy('name')->get();
         $product->load('category');
 
@@ -112,7 +112,7 @@ Route::middleware('auth')->group(function () {
         return view('users.product-show', compact('categories', 'product', 'relatedProducts'));
     })->name('customer.products.show');
 
-    Route::post('/customer/products/{product}/add-to-cart', function (Product $product) {
+    Route::post('/customer/products/{product:slug}/add-to-cart', function (Product $product) {
         $quantity = max(1, min((int) request('quantity', 1), max(1, $product->quantity)));
         $cart = session()->get('cart', []);
         $productId = (string) $product->id;
@@ -139,12 +139,12 @@ Route::middleware('auth')->group(function () {
         return back()->with('success', 'Đã thêm sản phẩm vào giỏ hàng.');
     })->name('customer.products.add-to-cart');
 
-    Route::post('/customer/products/{product}/order', function (Product $product) {
+    Route::post('/customer/products/{product:slug}/order', function (Product $product) {
         $product->refresh();
 
         if ($product->quantity < 1) {
             return redirect()
-                ->route('customer.products.show', $product)
+                ->route('customer.products.show', ['product' => $product->slug])
                 ->with('error', 'Sản phẩm đã hết hàng.');
         }
 
@@ -165,7 +165,7 @@ Route::middleware('auth')->group(function () {
         });
 
         return redirect()
-            ->route('customer.products.show', $product)
+            ->route('customer.products.show', ['product' => $product->slug])
             ->with('success', 'Đặt hàng thành công cho ' . $quantity . ' sản phẩm "' . $product->name . '". Đơn đã xuất hiện trong quản trị.');
     })->name('customer.products.order');
 

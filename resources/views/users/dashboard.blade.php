@@ -39,7 +39,7 @@
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         @forelse($products as $product)
             <div class="col">
-                <a href="{{ route('customer.products.show', $product) }}" class="text-decoration-none text-reset d-block h-100">
+                <a href="{{ route('customer.products.show', ['product' => $product->slug]) }}" class="text-decoration-none text-reset d-block h-100">
                     <div class="card h-100 border-light hover-shadow">
                         @if($product->image)
                             <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top product-image" alt="{{ $product->name }}">
@@ -100,26 +100,28 @@
     }
     .home-pagination nav {
         overflow-x: auto;
+        padding-bottom: 4px;
     }
     .home-pagination .pagination {
         display: flex;
         flex-wrap: nowrap;
-        gap: 12px;
+        gap: 8px;
         white-space: nowrap;
         margin-bottom: 0;
+        justify-content: center;
     }
     .home-pagination .page-link {
-        min-width: 50px;
-        height: 56px;
+        min-width: 38px;
+        height: 38px;
         border: 1px solid #ff2a1a;
-        border-radius: 8px;
+        border-radius: 6px;
         color: #ff2a1a;
         background: #fff;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 0 14px;
-        font-size: 32px;
+        padding: 0 10px;
+        font-size: 16px;
         line-height: 1;
         box-shadow: none;
     }
@@ -139,6 +141,17 @@
         background: #fff5f4;
         border-color: #ff2a1a;
         color: #ff2a1a;
+    }
+    @media (max-width: 576px) {
+        .home-pagination .pagination {
+            gap: 6px;
+        }
+        .home-pagination .page-link {
+            min-width: 34px;
+            height: 34px;
+            padding: 0 8px;
+            font-size: 14px;
+        }
     }
 </style>
 @endsection
